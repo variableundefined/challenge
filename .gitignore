@@ -1,2 +1,9 @@
+# Default
 node_modules
 package-lock.json
+
+# IDE
+.idea/
+
+# Build Artifacts
+dist/
