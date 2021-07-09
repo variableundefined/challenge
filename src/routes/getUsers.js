@@ -2,7 +2,14 @@
 const mockDBCalls = require('../database/index.js');
 
 const getUsersHandler = async (request, response) => {
-    const data = await mockDBCalls.getUsers();
+    let data;
+
+    try {
+        data = await mockDBCalls.getUsers();
+    } catch (error) {
+        return response.status(500).json({ error: error.toString() });
+    }
+
     return response.status(200).send(JSON.stringify(data));
 };
 

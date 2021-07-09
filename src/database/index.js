@@ -23,12 +23,41 @@ const getUsers = () => {
 
 const getListOfAgesOfUsersWith = (item) => {
     const dataAccessMethod = () => {
-        // fill me in :)
+
+        // 1st, build a list of users keyed by name (This database already assume name is unique)
+
+        let userWithAge = {}
+
+        for(const {username, age} of Object.values(db.usersById)){
+            userWithAge[`${username}`] = age;
+        }
+
+        // Build up ageCount now. Also implicitly assume there's a match for the name.
+        let ageCount = {}
+
+        for(const [key, value] of Object.entries(db.itemsOfUserByUsername)){
+            if(value.includes(item)){
+                const age = userWithAge[key];
+                ageCount[`${age}`] = ageCount[`${age}`] || 0; // Do nothing if the property exist, else, set it to 0.
+                ageCount[`${age}`] += 1;
+            }
+        }
+         return ageCount;
+
+    }
+    return mockDBCall(dataAccessMethod);
+}
+
+const getItems = () => {
+    const dataAccessMethod = () => {
+        const unfilteredItems = _.map(db.itemsOfUserByUsername, (user) => user);
+        return [...new Set(unfilteredItems.flat())];
     }
     return mockDBCall(dataAccessMethod);
 }
 
 module.exports = {
     getUsers,
-    getListOfAgesOfUsersWith
+    getListOfAgesOfUsersWith,
+    getItems
 };
